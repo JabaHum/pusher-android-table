@@ -10,8 +10,9 @@ To Set Up this project in your machine you'll need to take a few steps.
 3. Sync the project and import all required dependencies
 4. Create a Pusher Account and get your credentials ready for use
 5. Set up a simple Node.js server with your pusher credentials to handle your requests as described in the article
-6. Run the node server with the  [app.js](https://gist.github.com/Kennypee/384f4f6f0530482666f4fee3dd9a436a) file also linked in the article, do update it with your own credentials
-6. Update the java code with your own pusher credentials
+6. Update your [package.json](https://gist.github.com/Kennypee/3651ba1458e331a7449bbeb5d14561a9) with the neccesary dependencies
+7. Run the node server with the  [app.js](https://gist.github.com/Kennypee/384f4f6f0530482666f4fee3dd9a436a) file also linked in the article, do update it with your own credentials
+8. Update the java code with your own pusher credentials
 7. And finally run the app and give it a spin 
 
 
