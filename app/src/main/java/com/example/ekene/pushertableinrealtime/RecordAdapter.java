@@ -11,15 +11,15 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by EKENE on 12/22/2017.
+ * Created by EKENE on 1/17/2018.
  */
 
-public class RecordsAdapter extends BaseAdapter {
+public class RecordAdapter extends BaseAdapter {
 
     Context recordContext;
     List<Record> recordList;
 
-    public RecordsAdapter(Context context, List<Record> records) {
+    public RecordAdapter(Context context, List<Record> records) {
         recordList = records;
         recordContext = context;
     }
@@ -41,19 +41,19 @@ public class RecordsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        RecordViewHolder holder;
+        RecordAdapter.RecordViewHolder holder;
         if (view ==null){
 
             LayoutInflater recordInflater = (LayoutInflater) recordContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             view = recordInflater.inflate(R.layout.record, null);
-            holder = new RecordViewHolder();
+            holder = new RecordAdapter.RecordViewHolder();
             holder.ageView = (TextView) view.findViewById(R.id.record_age);
             holder.nameView = (TextView) view.findViewById(R.id.record_name);
             holder.positionView = (TextView) view.findViewById(R.id.record_position);
             holder.addressView = (TextView) view.findViewById(R.id.record_address);
             view.setTag(holder);
         }else {
-            holder = (RecordViewHolder) view.getTag();
+            holder = (RecordAdapter.RecordViewHolder) view.getTag();
         }
 
         Record record = (Record) getItem(i);

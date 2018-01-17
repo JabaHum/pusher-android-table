@@ -18,6 +18,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
 
@@ -33,17 +34,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      TextView name, age, position, address;
      EditText edtName, edtAge, edtPosition, edtAddress;
      Button BtnSave;
-    final   String RECORDS_ENDPOINT = "http://pusher-table-in-realtime.herokuapp.com";
-
+    private static final String RECORDS_ENDPOINT = "http://localhost:3000/records";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final RecordsAdapter recordsAdapter = new RecordsAdapter(this, new ArrayList<Record>());
+
+        final RecordAdapter recordAdapter = new RecordAdapter(this, new ArrayList<Record>());
         final ListView recordsView = (ListView) findViewById(R.id.records_view);
-        recordsView.setAdapter(recordsAdapter);
+        recordsView.setAdapter(recordAdapter);
 
         BtnSave = (Button)findViewById(R.id.BtnSave);
         name = (TextView)findViewById(R.id.name);
@@ -63,12 +64,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         BtnSave.setOnClickListener(this);
 
-        Pusher pusher = new Pusher("pusher_key");
 
+        PusherOptions options = new PusherOptions();
+        options.setCluster("us2");
+        Pusher pusher = new Pusher("pusher_key");
         pusher.connect();
 
         Channel channel = pusher.subscribe("records");
-
         channel.bind("new_record", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         Gson gson = new Gson();
                         Record record = gson.fromJson(data, Record.class);
-                        recordsAdapter.add(record);
-                        recordsView.setSelection(recordsAdapter.getCount() - 1);
+                        recordAdapter.add(record);
+                        recordsView.setSelection(recordAdapter.getCount() - 1);
                     }
 
                 });
@@ -91,12 +93,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP){
-            sendRecord();
+            addEmployee();
         }
         return true;
     }
 
-    private void sendRecord() {
+    private void addEmployee() {
 
         String nametxt = edtName.getText().toString();
         String agetxt = edtAge.getText().toString();
@@ -111,10 +113,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestParams params = new RequestParams();
 
         // set our JSON object
-        params.put("Name", nametxt);
-        params.put("Age", agetxt);
-        params.put("Position",positiontxt);
-        params.put("Address",addresstxt);
+        params.put("name", nametxt);
+        params.put("age", agetxt);
+        params.put("position",positiontxt);
+        params.put("address",addresstxt);
 
         // create our HTTP client
         AsyncHttpClient client = new AsyncHttpClient();
@@ -146,9 +148,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+
     @Override
     public void onClick(View view) {
-        sendRecord();
+        addEmployee();
     }
 
 }
